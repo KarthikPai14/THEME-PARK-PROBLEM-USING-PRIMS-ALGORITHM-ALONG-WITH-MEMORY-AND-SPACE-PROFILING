@@ -1,0 +1,80 @@
+import threading
+import psutil
+import GPUtil
+import numpy as np
+import matplotlib.pyplot as plt
+
+def mst_find():
+ INF = 9999999
+ # numertices in graph
+ V=int(input("Input vertices"))
+ G=np.zeros([V, V], dtype = int)
+ for i in range(0,V):
+ for j in range(0,V):
+ print("Element",i," and ",j)
+ k=int(input("Enter"))
+ G[i][j]=k
+
+
+ """G = [[0, 9, 75, 0, 0],
+ [9, 0, 95, 19, 42],
+ [75, 95, 0, 51, 66],
+ [0, 19, 51, 0, 31],
+ [0, 42, 66, 31, 0] ]
+ """
+
+ selected = [0] * V
+
+ no_edge = 0
+
+ selected[0] = True
+ # print for edge and weight
+ print("Edge : Weight\n")
+ while (no_edge < V - 1):
+
+ minimum = INF
+ x = 0
+ y = 0
+ for i in range(V):
+ if selected[i]:
+ for j in range(V):
+ if ((not selected[j]) and G[i][j]):
+ # not in selected and there is an edge
+ if minimum > G[i][j]:
+ minimum = G[i][j]
+ x = i
+ y = j
+ print(str(x) + "-" + str(y) + ":" + str(G[x][y]))
+ selected[y] = True
+ no_edge += 1
+ return 0;
+
+def mplot():
+ for i in range(50):
+ # Obtaining all the essential details
+ cpu_usage = psutil.cpu_percent()
+ mem_usage = psutil.virtual_memory().percent
+
+ # Creating the scatter plot
+ plt.scatter(i, cpu_usage, color = "red")
+ plt.scatter(i, mem_usage, color = "blue")
+ plt.legend(["CPU", "Memory"], loc ="lower right")
+ plt.pause(0.01)
+ # Obtaining the GPU details
+
+# Plotting the information
+plt.show()
+if __name__ =="__main__":
+
+
+ t1 = threading.Thread(target=mst_find, )
+ t2 = threading.Thread(target=mplot, )
+ # starting thread 1
+ t1.start()
+ t1.join()
+ # starting thread 2
+ t2.start()
+ # wait until thread 1 is completely executed
+
+ # wait until thread 2 is completely executed
+ t2.join()
